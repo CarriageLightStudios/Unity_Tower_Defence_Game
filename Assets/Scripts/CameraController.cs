@@ -5,6 +5,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     float rotationSpeed = 2f;
+    float dragSpeed = 0.5f;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,20 +15,28 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        MoveCamera();
+    }
+
+    void MoveCamera()
+    {
+        float x = Input.GetAxis("Mouse X");
+        float y = Input.GetAxis("Mouse Y");
         if (Input.GetMouseButton(2))
         {
-            if (Input.GetAxis("Mouse X") > 0)
+            if (x != 0)
             {
-                transform.position += -(transform.right * 0.1f);
+                transform.position += -(transform.right * (x * dragSpeed));
             }
-            else if (Input.GetAxis("Mouse X") < 0)
+
+            if (y != 0)
             {
-                transform.position += transform.right * 0.1f;
+                transform.position += -(transform.up * (y * dragSpeed));
             }
         }
         if (Input.GetMouseButton(1))
         {
-            transform.eulerAngles += rotationSpeed * new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxisRaw("Mouse X"), 0.0f);
+            transform.eulerAngles += rotationSpeed * new Vector3(-y, x, 0.0f);
         }
         if (Input.GetAxis("Mouse ScrollWheel") > 0f)
         {
