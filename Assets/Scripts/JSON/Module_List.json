@@ -1,0 +1,41 @@
+[
+    {
+        "object_name": "Dirt_Tile",
+        "object_rotation": "0",
+        "posX": "0s",
+        "negX": "0s",
+        "posY": "v0_0",
+        "negY": "v0_0",
+        "posZ": "0s",
+        "negZ": "0s",
+        "constrain_to": "",
+        "contrain_from": "",
+        "weight": "2"
+    },
+    {
+        "object_name": "Ground_Tile",
+        "object_rotation": "0",
+        "posX": "1s",
+        "negX": "1s",
+        "posY": "-1",
+        "negY": "v0_0",
+        "posZ": "1s",
+        "negZ": "1s",
+        "constrain_to": "",
+        "contrain_from": "",
+        "weight": "5"
+    },
+    {
+        "object_name": "",
+        "object_rotation": "0",
+        "posX": "-1",
+        "negX": "-1",
+        "posY": "-1",
+        "negY": "-1",
+        "posZ": "-1",
+        "negZ": "-1",
+        "constrain_to": "",
+        "contrain_from": "",
+        "weight": "1"
+    }
+]

@@ -5,11 +5,12 @@ using Assets.Scripts.Interfaces;
 
 public class GameController : MonoBehaviour
 {
-    public MapController mc;
+    public MapController mapController;
 
     // Start is called before the first frame update
     void Start()
     {
+        mapController.Initialise(new Vector3(3,3,3));
     }
 
     // Update is called once per frame
@@ -27,7 +28,7 @@ public class GameController : MonoBehaviour
         {
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
-                mc.Build(hit.transform.position, "Turret");
+                //mapController.Build(hit.transform.position, "Turret");
             }
         }
     }
