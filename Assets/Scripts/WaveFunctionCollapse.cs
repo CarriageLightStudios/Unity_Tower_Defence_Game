@@ -38,12 +38,34 @@ public class Module
 
     }
 
+    public string GetConnectingocket(int socketNumber)
+    {
+        switch (socketNumber)
+        {
+            case 0: //pX
+                return socketList[1]; //nX
+            case 1://nX
+                return socketList[0]; //pX
+            case 2://pY
+                return socketList[3]; //nY
+            case 3://nY
+                return socketList[2]; //pY
+            case 4://pZ
+                return socketList[5]; //nZ
+            case 5://nZ
+                return socketList[4]; //pZ
+            default:
+                Debug.LogError("Error, socket out of bounds!.");
+                return socketList[socketNumber];
+        }
+    }
+
 }
 
 public class WaveFunctionCollapse
 {
     private string jsonModulePath = "..\\Unity Tower Defence Game\\Assets\\Scripts\\JSON\\Module_List.json";
-    private List<Module> moduleList;
+    //private List<Module> moduleList;
     private Dictionary<Vector3, List<Module>> _waveFunction = new();
     public Dictionary<Vector3, List<Module>> waveFunction
     {
@@ -57,7 +79,7 @@ public class WaveFunctionCollapse
     {
 
         string jsonString = System.IO.File.ReadAllText(jsonModulePath);
-        moduleList = ConvertJSONToModuleList(jsonString);
+        List<Module> moduleList = ConvertJSONToModuleList(jsonString);
         size = mapSize;
         numRemaining = mapSize.x * mapSize.y * mapSize.z;
 
@@ -68,7 +90,8 @@ public class WaveFunctionCollapse
             {
                 for (int z = 0; z < size.z; z++)
                 {
-                    _waveFunction.Add(new Vector3(x, y, z), moduleList);
+                    List<Module> mList = new(moduleList);
+                    _waveFunction.Add(new Vector3(x, y, z), mList);
                 }
             }
         }
@@ -82,18 +105,18 @@ public class WaveFunctionCollapse
     private void Iterate()
     {
         List<Vector3> coords = GetMinEntropyCoords();
-        CollapsAt(coords);
+        Vector3 collapsedCoord = CollapsAt(coords);
         numRemaining -= 1;
         if (numRemaining < 1)
         {
             isCollapsed = true;
             return;
         }
-        Propagate(coords);
+        Propagate(collapsedCoord);
     }
     // Removes all other module choices at given coords.
     // Chooses a coord at random.
-    private void CollapsAt(List<Vector3> coords)
+    private Vector3 CollapsAt(List<Vector3> coords)
     {
         Vector3 chosenCoord;
         System.Random rnd = new System.Random();
@@ -115,11 +138,13 @@ public class WaveFunctionCollapse
         moduleList.Clear();
         moduleList.Add(chosenModule);
         Debug.Log("ChosenTile: " + chosenModule.objectName);
+        return chosenCoord;
     }
     
-    private void Propagate(List<Vector3> coords)
+    private void Propagate(Vector3 collapsedCoord)
     {
-        List<Vector3> stack = coords;
+        List<Vector3> stack = new();
+        stack.Add(collapsedCoord);
 
         while (stack.Count > 0)
         {
@@ -145,7 +170,7 @@ public class WaveFunctionCollapse
                     List<Module> newModuleList = new List<Module>();// Create a new list for valid modules
                     foreach (Module otherModule in otherModuleList)// Loop through other coord list
                     {
-                        if (validSockits.Contains(otherModule.socketList[i])) {
+                        if (validSockits.Contains(otherModule.GetConnectingocket(i))) {
                             newModuleList.Add(otherModule);// Add to new list if valid
                         }
                     }
@@ -189,7 +214,7 @@ public class WaveFunctionCollapse
     private List<Vector3> GetMinEntropyCoords()
     {
         List<Vector3> minEntropyList = new List<Vector3>();
-        int minEntropy = moduleList.Count;
+        float minEntropy = size.x * size.y * size.z;
         foreach(KeyValuePair<Vector3,List<Module>> entry in _waveFunction)
         {
             if (entry.Value.Count > minEntropy) { }
