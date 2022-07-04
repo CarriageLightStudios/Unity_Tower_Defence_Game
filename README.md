@@ -2,7 +2,7 @@
 
 ## Overview
 
-This game aims to cross the genres of Tower Defence/City Building with the fast action and replayability of a roughlite.
+This game aims to cross the genres of Tower Defence/City Building with the fast action and replayability of a rougelite.
 
 ## Plot
 
